@@ -1,0 +1,73 @@
+# DEB and RPM packages (nFPM), from a release build:
+#
+#   VERSION=0.1.0 ARCH=amd64 nfpm package -f packaging/linux/nfpm.yaml -p deb -t dist/
+#
+# mpv's library does the playback; yt-dlp finds each song's stream and must stay current (YouTube
+# changes often), so it's recommended rather than pinned: a newer copy from pip or the project's
+# own binary works too.
+name: ytmfast
+arch: ${ARCH}
+platform: linux
+version: ${VERSION}
+maintainer: clevim <clever.filho@gmail.com>
+description: A native YouTube Music client
+homepage: https://github.com/clevim/YtmFast
+license: MIT
+section: sound
+priority: optional
+contents:
+  - src: target/release/ytmfast
+    dst: /usr/bin/ytmfast
+    file_info:
+      mode: 0755
+  - src: packaging/linux/ytmfast.desktop
+    dst: /usr/share/applications/ytmfast.desktop
+    file_info:
+      mode: 0644
+  - src: packaging/linux/ytmfast.svg
+    dst: /usr/share/icons/hicolor/scalable/apps/ytmfast.svg
+    file_info:
+      mode: 0644
+  - src: LICENSE
+    dst: /usr/share/licenses/ytmfast/LICENSE
+    file_info:
+      mode: 0644
+  - src: README.md
+    dst: /usr/share/doc/ytmfast/README.md
+    file_info:
+      mode: 0644
+overrides:
+  deb:
+    depends:
+      - libmpv2 (>= 0.38)
+      - libsqlite3-0
+      - libdbus-1-3
+      - libgl1
+      - libegl1
+      - libxkbcommon0
+      - libwayland-client0
+      - libwayland-egl1
+      - libx11-6
+      - libxcursor1
+      - libxi6
+      - libxrandr2
+    recommends:
+      - yt-dlp
+      - pipewire-bin
+  rpm:
+    depends:
+      - mpv-libs >= 0.38
+      - sqlite-libs
+      - dbus-libs
+      - libglvnd-egl
+      - libglvnd-glx
+      - libxkbcommon
+      - libwayland-client
+      - libwayland-egl
+      - libX11
+      - libXcursor
+      - libXi
+      - libXrandr
+    recommends:
+      - yt-dlp
+      - pipewire-utils

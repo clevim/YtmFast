@@ -1,0 +1,64 @@
+[package]
+name = "ytmfast"
+version = "0.1.0"
+license = "MIT"
+description = "A native YouTube Music client"
+repository = "https://github.com/clevim/YtmFast"
+keywords = ["youtube-music", "music", "egui", "mpv", "player"]
+categories = ["multimedia::audio"]
+edition = "2024"
+
+[dependencies]
+# Inflates KuGou's word-timed lyrics (already in the build through png).
+miniz_oxide = "0.8"
+eframe = { version = "0.36.2", default-features = false, features = ["accesskit", "default_fonts", "glow", "wayland", "x11"] }
+egui_extras = { version = "0.36.2", features = ["image"] }
+ehttp = "0.7.1"
+image = { version = "0.25.10", default-features = false, features = ["jpeg", "png", "webp", "bmp"] }
+libmpv2 = "6.0.0"
+libmpv2-sys = "4.0.1"
+# rustls with the system's certificates, like the rest of the app: one TLS stack, no OpenSSL to
+# link (or to depend on in the packages).
+rustypipe = { version = "0.11.4", default-features = false, features = ["userdata", "rustls-tls-native-roots"] }
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.152"
+tokio = { version = "1.53.2", features = ["rt-multi-thread"] }
+zip = { version = "9.0.1", default-features = false, features = ["deflate"] }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+ksni = "0.3.6"
+# Already in the build through ksni / accesskit; used for our own MPRIS service.
+zbus = "5.19"
+# Reads the Firefox-family cookie database directly (the system's libsqlite3, which Firefox uses
+# too), instead of starting yt-dlp on every launch to refresh the login.
+rusqlite = "0.37"
+
+[target.'cfg(not(target_os = "linux"))'.dependencies]
+# Windows / macOS media controls; Linux has its own MPRIS (src/mpris.rs).
+souvlaki = { version = "0.8.3", default-features = false, features = ["use_zbus"] }
+tray-icon = "0.26.1"
+
+# The executable's icon and version info (build.rs), when building on Windows.
+[target.'cfg(windows)'.build-dependencies]
+winresource = "0.1"
+
+[target.'cfg(target_os = "windows")'.dependencies]
+raw-window-handle = "0.6"
+# "Song changed" toasts (Linux talks to the desktop over D-Bus itself, macOS through osascript).
+notify-rust = "4"
+# Handing a hidden window's memory back (EmptyWorkingSet) and the parent console for commands.
+windows-sys = { version = "0.60", features = ["Win32_Foundation", "Win32_System_Console", "Win32_System_ProcessStatus", "Win32_System_Threading"] }
+
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"
+
+
+# As Spotifast: smaller binary (less resident memory) and a bit faster. No panic = "abort":
+# a panic in a helper thread must not take the player down.
+[profile.release]
+# Size over the last few % of speed: the UI is idle most of the time, and code that isn't there
+# doesn't sit in memory.
+opt-level = "s"
+lto = "thin"
+codegen-units = 1
+strip = true

@@ -1,0 +1,36 @@
+[Desktop Entry]
+Type=Application
+Name=YtmFast
+GenericName=YouTube Music Player
+GenericName[pt_BR]=Player do YouTube Music
+Comment=A light, native YouTube Music client
+Comment[pt_BR]=Cliente leve e nativo para o YouTube Music
+Exec=ytmfast %U
+Icon=ytmfast
+Terminal=false
+Categories=AudioVideo;Audio;Player;Music;
+Keywords=youtube;music;player;mpris;
+StartupWMClass=ytmfast
+StartupNotify=true
+SingleMainWindow=true
+Actions=PlayPause;Next;Previous;Mini;
+
+[Desktop Action PlayPause]
+Name=Play/Pause
+Name[pt_BR]=Tocar/Pausar
+Exec=ytmfast play-pause
+
+[Desktop Action Next]
+Name=Next
+Name[pt_BR]=Próxima
+Exec=ytmfast next
+
+[Desktop Action Previous]
+Name=Previous
+Name[pt_BR]=Anterior
+Exec=ytmfast previous
+
+[Desktop Action Mini]
+Name=Show
+Name[pt_BR]=Mostrar
+Exec=ytmfast show

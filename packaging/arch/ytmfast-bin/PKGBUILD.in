@@ -1,0 +1,25 @@
+# Maintainer: clevim <clever.filho at gmail dot com>
+# The release binary. The release workflow fills in @VERSION@ and the checksums.
+pkgname=ytmfast-bin
+pkgver=@VERSION@
+pkgrel=1
+pkgdesc="A native YouTube Music client (release binary)"
+arch=('x86_64' 'aarch64')
+url="https://github.com/clevim/YtmFast"
+license=('MIT')
+depends=('mpv' 'yt-dlp' 'sqlite' 'dbus' 'libglvnd' 'libxkbcommon' 'wayland' 'hicolor-icon-theme')
+optdepends=('pipewire: real spectrum in the compact player')
+provides=('ytmfast')
+conflicts=('ytmfast')
+source_x86_64=("https://github.com/clevim/YtmFast/releases/download/v$pkgver/ytmfast-v$pkgver-x86_64-unknown-linux-gnu.tar.gz")
+source_aarch64=("https://github.com/clevim/YtmFast/releases/download/v$pkgver/ytmfast-v$pkgver-aarch64-unknown-linux-gnu.tar.gz")
+sha256sums_x86_64=('@SHA256_LINUX_X86_64@')
+sha256sums_aarch64=('@SHA256_LINUX_AARCH64@')
+
+package() {
+  cd "ytmfast-v$pkgver-$CARCH-unknown-linux-gnu"
+  install -Dm755 ytmfast "$pkgdir/usr/bin/ytmfast"
+  install -Dm644 packaging/linux/ytmfast.desktop "$pkgdir/usr/share/applications/ytmfast.desktop"
+  install -Dm644 packaging/linux/ytmfast.svg "$pkgdir/usr/share/icons/hicolor/scalable/apps/ytmfast.svg"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
