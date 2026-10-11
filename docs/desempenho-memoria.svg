@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="412" viewBox="0 0 760 412" role="img" aria-labelledby="t d">
+<title id="t">Memória privada tocando música</title>
+<desc id="d">Janela aberta · YtmFast: 210 MiB; Janela aberta · Spotifast: 195 MiB; Janela aberta · YouTube Music (Electron): 596 MiB; Em segundo plano · YtmFast · iniciado na bandeja: 76 MiB; Em segundo plano · YtmFast · janela fechada p/ bandeja: 182 MiB; Em segundo plano · Spotifast · na bandeja: 195 MiB; Em segundo plano · YouTube Music · minimizado: 556 MiB</desc>
+<style>
+  .bg{fill:#fcfcfb} .t1{fill:#0b0b0b} .t2{fill:#52514e} .mu{fill:#898781} .grid{stroke:#e1e0d9}
+  .hi{fill:#2a78d6} .ref{fill:#a9a79f}
+  text{font-family:-apple-system,"Segoe UI",Roboto,"Noto Sans",Helvetica,Arial,sans-serif}
+  @media (prefers-color-scheme: dark){
+    .bg{fill:#1a1a19} .t1{fill:#f0efec} .t2{fill:#c3c2b7} .grid{stroke:#2c2c2a} .hi{fill:#3987e5} .ref{fill:#6b6a64}
+  }
+</style>
+<rect class="bg" x="0" y="0" width="760" height="412" rx="10"/>
+<text class="t1" x="24" y="34" font-size="17" font-weight="600">Memória privada tocando música</text>
+<text class="t2" x="24" y="56" font-size="13">MiB · menor é melhor · mesma máquina (Linux, KDE Plasma, NVIDIA)</text>
+<line class="grid" x1="340.0" y1="72" x2="340.0" y2="372" stroke-width="1"/>
+<text class="mu" x="340.0" y="390" font-size="12" text-anchor="middle">0</text>
+<line class="grid" x1="460.0" y1="72" x2="460.0" y2="372" stroke-width="1"/>
+<text class="mu" x="460.0" y="390" font-size="12" text-anchor="middle">200</text>
+<line class="grid" x1="580.0" y1="72" x2="580.0" y2="372" stroke-width="1"/>
+<text class="mu" x="580.0" y="390" font-size="12" text-anchor="middle">400</text>
+<line class="grid" x1="700.0" y1="72" x2="700.0" y2="372" stroke-width="1"/>
+<text class="mu" x="700.0" y="390" font-size="12" text-anchor="middle">600</text>
+<text class="t2" x="24" y="94" font-size="12" font-weight="600" letter-spacing="0.4">JANELA ABERTA</text>
+<path class="hi" d="M340 106 H462.0 Q466.0 106 466.0 110 V124 Q466.0 128 462.0 128 H340 Z"><title>YtmFast: 210 MiB</title></path>
+<text class="t1" x="326" y="122" font-size="14" text-anchor="end" font-weight="600">YtmFast</text>
+<text class="t1" x="474.0" y="122" font-size="14" font-weight="600">210</text>
+<path class="ref" d="M340 140 H453.0 Q457.0 140 457.0 144 V158 Q457.0 162 453.0 162 H340 Z"><title>Spotifast: 195 MiB</title></path>
+<text class="t2" x="326" y="156" font-size="14" text-anchor="end">Spotifast</text>
+<text class="t1" x="465.0" y="156" font-size="14" font-weight="600">195</text>
+<path class="ref" d="M340 174 H693.6 Q697.6 174 697.6 178 V192 Q697.6 196 693.6 196 H340 Z"><title>YouTube Music (Electron): 596 MiB</title></path>
+<text class="t2" x="326" y="190" font-size="14" text-anchor="end">YouTube Music (Electron)</text>
+<text class="t1" x="705.6" y="190" font-size="14" font-weight="600">596</text>
+<text class="t2" x="24" y="226" font-size="12" font-weight="600" letter-spacing="0.4">EM SEGUNDO PLANO</text>
+<path class="hi" d="M340 238 H381.6 Q385.6 238 385.6 242 V256 Q385.6 260 381.6 260 H340 Z"><title>YtmFast · iniciado na bandeja: 76 MiB</title></path>
+<text class="t1" x="326" y="254" font-size="14" text-anchor="end" font-weight="600">YtmFast · iniciado na bandeja</text>
+<text class="t1" x="393.6" y="254" font-size="14" font-weight="600">76</text>
+<path class="hi" d="M340 272 H445.2 Q449.2 272 449.2 276 V290 Q449.2 294 445.2 294 H340 Z"><title>YtmFast · janela fechada p/ bandeja: 182 MiB</title></path>
+<text class="t1" x="326" y="288" font-size="14" text-anchor="end" font-weight="600">YtmFast · janela fechada p/ bandeja</text>
+<text class="t1" x="457.2" y="288" font-size="14" font-weight="600">182</text>
+<path class="ref" d="M340 306 H453.0 Q457.0 306 457.0 310 V324 Q457.0 328 453.0 328 H340 Z"><title>Spotifast · na bandeja: 195 MiB</title></path>
+<text class="t2" x="326" y="322" font-size="14" text-anchor="end">Spotifast · na bandeja</text>
+<text class="t1" x="465.0" y="322" font-size="14" font-weight="600">195</text>
+<path class="ref" d="M340 340 H669.6 Q673.6 340 673.6 344 V358 Q673.6 362 669.6 362 H340 Z"><title>YouTube Music · minimizado: 556 MiB</title></path>
+<text class="t2" x="326" y="356" font-size="14" text-anchor="end">YouTube Music · minimizado</text>
+<text class="t1" x="681.6" y="356" font-size="14" font-weight="600">556</text>
+</svg>
