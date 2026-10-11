@@ -1,0 +1,81 @@
+name: Release
+
+# A version tag (v0.2.0) builds the Linux downloads, publishes them on the GitHub release with
+# their checksums, and attaches the AUR recipes filled in for that version.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  linux:
+    name: Linux (${{ matrix.target }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # glibc 2.39: runs on Ubuntu 24.04, Debian 13, Fedora 40 and newer.
+          - { os: ubuntu-24.04, target: x86_64-unknown-linux-gnu, arch: amd64 }
+          - { os: ubuntu-24.04-arm, target: aarch64-unknown-linux-gnu, arch: arm64 }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libmpv-dev libsqlite3-dev libxkbcommon-dev libwayland-dev libgl1-mesa-dev
+      - run: cargo test --release
+      - run: cargo build --release
+      - name: Archive
+        run: |
+          name="ytmfast-${GITHUB_REF_NAME}-${{ matrix.target }}"
+          mkdir -p "dist/$name"
+          cp target/release/ytmfast README.md LICENSE "dist/$name/"
+          cp --parents packaging/linux/ytmfast.desktop packaging/linux/ytmfast.svg "dist/$name/"
+          tar -C dist -czf "dist/$name.tar.gz" "$name"
+          rm -rf "dist/$name"
+      - name: DEB and RPM
+        run: |
+          case "$(uname -m)" in aarch64) a=arm64 ;; *) a=x86_64 ;; esac
+          curl -fsSL "https://github.com/goreleaser/nfpm/releases/download/v2.43.0/nfpm_2.43.0_Linux_${a}.tar.gz" | tar -xz nfpm
+          export VERSION="${GITHUB_REF_NAME#v}" ARCH=${{ matrix.arch }}
+          ./nfpm package -f packaging/linux/nfpm.yaml -p deb -t dist/
+          ./nfpm package -f packaging/linux/nfpm.yaml -p rpm -t dist/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.target }}
+          path: dist/*
+          if-no-files-found: error
+
+  publish:
+    name: GitHub release
+    needs: [linux]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - name: Source archive and checksums
+        run: |
+          curl -fsSL "https://github.com/${GITHUB_REPOSITORY}/archive/refs/tags/${GITHUB_REF_NAME}.tar.gz" \
+            -o "dist/ytmfast-${GITHUB_REF_NAME}-source.tar.gz"
+          (cd dist && sha256sum * > checksums.txt)
+      - name: AUR recipes
+        run: |
+          python3 packaging/fill-recipes.py dist "${GITHUB_REF_NAME#v}" recipes
+          tar -czf "dist/ytmfast-${GITHUB_REF_NAME}-recipes.tar.gz" -C recipes .
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          name: YtmFast ${{ github.ref_name }}
+          generate_release_notes: true
+          # v0.2.0-rc1 is a pre-release.
+          prerelease: ${{ contains(github.ref_name, '-') }}

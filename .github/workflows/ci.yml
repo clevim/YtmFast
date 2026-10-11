@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - name: Build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libmpv-dev libsqlite3-dev libxkbcommon-dev libwayland-dev libgl1-mesa-dev
+      - run: cargo clippy --release --all-targets -- -D warnings
+      - run: cargo test --release
