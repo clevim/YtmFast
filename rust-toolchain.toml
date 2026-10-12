@@ -1,0 +1,5 @@
+# Pinned so local builds and CI use the same compiler and clippy (a newer clippy brings new lints
+# that would fail CI out of the blue). Upgrades are deliberate: bump this, fix any new warnings.
+[toolchain]
+channel = "1.99.0"
+components = ["clippy", "rustfmt"]

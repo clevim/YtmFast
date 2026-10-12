@@ -56,7 +56,7 @@ impl PwTap {
                 }
                 let mut b = sink.lock().unwrap();
                 // ponytail: assumes reads land on 4-byte boundaries, which pipes of f32 frames do in practice
-                b.extend(chunk[..n - n % 4].chunks_exact(4).map(|c| f32::from_le_bytes([c[0], c[1], c[2], c[3]])));
+                b.extend(chunk[..n].as_chunks::<4>().0.iter().map(|c| f32::from_le_bytes(*c)));
                 let excess = b.len().saturating_sub(KEEP);
                 b.drain(..excess);
             }

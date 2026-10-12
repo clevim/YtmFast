@@ -156,10 +156,8 @@ fn card(v: &Value) -> Option<Card> {
                 (None, Some(p)) => Open::Playlist(p.into()),
                 _ => return None,
             }
-        } else if let Some(p) = nav.get("watchPlaylistEndpoint").and_then(|w| w["playlistId"].as_str()) {
-            Open::Playlist(p.into())
         } else {
-            return None;
+            Open::Playlist(nav.get("watchPlaylistEndpoint").and_then(|w| w["playlistId"].as_str())?.into())
         };
         return Some(Card { title: runs(&r["title"]), sub: runs(&r["subtitle"]), thumb: thumbs(&r["thumbnailRenderer"]), open });
     }
