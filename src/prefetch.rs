@@ -140,6 +140,12 @@ impl Prefetch {
                             // Only the file loading now can still fail: older swaps are done with.
                             s.swapped.clear();
                             s.swapped.insert(r.url, (file, id));
+                        } else {
+                            // Not resolved ahead (a song picked by hand): mpv's yt-dlp goes without the
+                            // login, ~1.5 s instead of ~5 (logged in it walks several clients and a JS
+                            // challenge). Premium's higher bitrate still comes with the prefetched songs.
+                            let raw = get_str(h.0, c"ytdl-raw-options").unwrap_or_default();
+                            set_str(h.0, c"file-local-options/ytdl-raw-options", &anonymous(&raw));
                         }
                     }
                 } else {
@@ -192,6 +198,11 @@ impl Prefetch {
     }
 }
 
+/// mpv's `ytdl-raw-options` list without the login (paths in it never hold a comma, see audio.rs).
+fn anonymous(raw: &str) -> String {
+    raw.split(',').filter(|o| !o.is_empty() && !o.starts_with("cookies=")).collect::<Vec<_>>().join(",")
+}
+
 /// yt-dlp for one song: the audio stream link and the User-Agent it must be fetched with.
 fn resolve(s: &Settings, id: &str) -> Option<(String, String)> {
     let mut cmd = crate::settings::command(crate::settings::ytdlp());
@@ -220,5 +231,11 @@ mod tests {
     fn link_lifetime() {
         assert_eq!(super::valid_until("https://x/videoplayback?a=1&expire=1000000&b=2", 5), 1000000 - super::MARGIN);
         assert_eq!(super::valid_until("https://x/no-expiry", 100), 100 + super::FALLBACK_LIFE);
+    }
+
+    #[test]
+    fn login_dropped() {
+        assert_eq!(super::anonymous("extractor-args=youtube:skip=hls,cookies=/a/c.txt,proxy=http://p:1"), "extractor-args=youtube:skip=hls,proxy=http://p:1");
+        assert_eq!(super::anonymous(""), "");
     }
 }
