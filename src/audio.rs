@@ -80,8 +80,11 @@ pub fn update_eq(mpv: &Mpv, s: &Settings, volume: f64, sent: &mut String) -> boo
     ok
 }
 
+/// Skips the HLS manifests yt-dlp fetches by default: video-only use, ~300 ms of each lookup.
+pub const YTDL_EXTRACTOR_ARGS: &str = "youtube:skip=hls";
+
 pub fn ytdl_raw_options(s: &Settings) -> String {
-    let mut o = vec![];
+    let mut o = vec![format!("extractor-args={YTDL_EXTRACTOR_ARGS}")];
     let cookies = ytdlp_cookie_file().display().to_string();
     // mpv splits this list on commas: a path or proxy containing one would inject options.
     if ytdlp_cookie_file().exists() && !cookies.contains(',') {

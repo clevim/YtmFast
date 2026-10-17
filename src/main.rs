@@ -381,6 +381,16 @@ fn store_cookies(cookies: &str) {
     settings::write_private(&path, cookies.as_bytes()).ok();
 }
 
+/// Logged in, YouTube Music wraps music videos in a song/video switch rustypipe 0.11 can't read
+/// ("no video item"): asked anonymously first (same track and lyrics), the account only for what
+/// needs it (a private upload).
+pub async fn music_details(q: &RustyPipeQuery, id: &str) -> Result<rustypipe::model::TrackDetails, Error> {
+    match q.clone().unauthenticated().music_details(id).await {
+        Err(_) => q.music_details(id).await,
+        ok => ok,
+    }
+}
+
 /// Library writes go straight to InnerTube; rustypipe only covers reads.
 async fn yt_write(q: &RustyPipeQuery, endpoint: &str, body: serde_json::Value) -> Result<serde_json::Value, Error> {
     let txt = q.raw(ClientType::DesktopMusic, endpoint, &body).await?;
@@ -896,7 +906,7 @@ impl App {
     fn play_link(&mut self, url: &str) -> Result<(), String> {
         let q = self.q();
         match ipc::parse_link(url).ok_or(tr("link não reconhecido"))? {
-            ipc::Link::Track(id) => self.spawn(async move { Ok(Msg::PlayRadio(q.music_details(&id).await?.track)) }),
+            ipc::Link::Track(id) => self.spawn(async move { Ok(Msg::PlayRadio(music_details(&q, &id).await?.track)) }),
             ipc::Link::Playlist(id) => self.spawn(async move {
                 let mut pl = q.music_playlist(&id).await?;
                 pl.tracks.extend_limit(&q, 2000).await?;

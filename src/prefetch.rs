@@ -196,6 +196,7 @@ impl Prefetch {
 fn resolve(s: &Settings, id: &str) -> Option<(String, String)> {
     let mut cmd = crate::settings::command(crate::settings::ytdlp());
     cmd.args(["--ignore-config", "--no-warnings", "--quiet", "--no-playlist", "-f", crate::audio::ytdl_format(s.quality)]);
+    cmd.args(["--extractor-args", crate::audio::YTDL_EXTRACTOR_ARGS]);
     cmd.args(["-O", "%(url)s", "-O", "%(http_headers.User-Agent)s"]);
     if ytdlp_cookie_file().exists() {
         cmd.arg("--cookies").arg(ytdlp_cookie_file());

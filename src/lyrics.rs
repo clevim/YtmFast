@@ -41,7 +41,7 @@ pub async fn fetch(q: &RustyPipeQuery, t: &TrackItem, words: bool) -> Lyrics {
             return l;
         }
     }
-    let lyrics_id = q.music_details(&t.id).await.ok().and_then(|d| d.lyrics_id);
+    let lyrics_id = crate::music_details(q, &t.id).await.ok().and_then(|d| d.lyrics_id);
     if let Some(lid) = lyrics_id.clone() {
         let timed = tokio::task::spawn_blocking(move || ytm_timed(&lid)).await.ok().flatten();
         if let Some(l) = timed {
