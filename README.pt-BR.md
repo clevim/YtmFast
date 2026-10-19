@@ -116,13 +116,13 @@ receitas instalam com o `makepkg`. Cada release traz elas preenchidas para aquel
 
 ```sh
 mkdir ytmfast && cd ytmfast
-curl -LO https://github.com/clevim/YtmFast/releases/latest/download/ytmfast-v0.1.0-recipes.tar.gz
+curl -LO https://github.com/clevim/YtmFast/releases/latest/download/ytmfast-v0.1.1-recipes.tar.gz
 tar xzf ytmfast-*-recipes.tar.gz
 cd arch/ytmfast-bin   # o binário do release; ou arch/ytmfast para compilar do código
 makepkg -si
 ```
 
-Troque `v0.1.0` pela versão do release. O pacman instala as dependências (mpv, yt-dlp), e o app
+Troque `v0.1.1` pela versão do release. O pacman instala as dependências (mpv, yt-dlp), e o app
 atualiza como qualquer pacote quando você repete isso com um release mais novo.
 
 ### Compilando
